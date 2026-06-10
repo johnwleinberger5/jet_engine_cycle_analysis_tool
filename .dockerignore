@@ -1,0 +1,11 @@
+.git
+.venv
+__pycache__
+*.pyc
+*.pyo
+outputs/
+docs/
+.github/
+assets/
+README.md
+CLAUDE.md

@@ -74,9 +74,9 @@ Every push triggers a three-stage GitHub Actions workflow:
 
 ## Run with Docker (recommended)
 
-```bash
+```powershell
 docker build -f docker/Dockerfile -t engine-analysis .
-docker run --rm -v "$(pwd)/outputs:/app/outputs" engine-analysis
+docker run --rm -v "${PWD}/outputs:/app/outputs" engine-analysis
 ```
 
 Plots are written to `outputs/`.

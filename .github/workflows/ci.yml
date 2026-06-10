@@ -21,7 +21,7 @@ jobs:
       - name: Set up Conan
         if: hashFiles('solver/conanfile.txt') != ''
         run: |
-          pip install conan
+          pip install conan==2.29.0
           conan profile detect --force
 
       - name: Install C++ dependencies (Conan)
@@ -60,7 +60,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.13"
 
       - name: Install Python dependencies
         if: hashFiles('pyproject.toml') != ''
@@ -91,7 +91,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.13"
 
       - name: Install Python dependencies
         if: hashFiles('pyproject.toml') != ''
@@ -128,21 +128,21 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Docker image
-        if: hashFiles('docker/Dockerfile') != ''
+        if: hashFiles('docker/Dockerfile') != '' && hashFiles('solver/CMakeLists.txt') != ''
         run: docker build -f docker/Dockerfile -t engine-analysis .
 
       - name: Run trade study via Docker
-        if: hashFiles('docker/Dockerfile') != ''
+        if: hashFiles('docker/Dockerfile') != '' && hashFiles('solver/CMakeLists.txt') != ''
         run: docker run --rm -v "${{ github.workspace }}/outputs:/app/outputs" engine-analysis
 
       - name: Upload Docker-produced plots
-        if: hashFiles('docker/Dockerfile') != ''
+        if: hashFiles('docker/Dockerfile') != '' && hashFiles('solver/CMakeLists.txt') != ''
         uses: actions/upload-artifact@v4
         with:
           name: trade-study-plots-docker
           path: outputs/
           if-no-files-found: ignore
 
-      - name: Dockerfile not yet present — skipping
-        if: hashFiles('docker/Dockerfile') == ''
-        run: echo "docker/Dockerfile not found — skipping Docker job"
+      - name: Solver not yet present — skipping Docker build
+        if: hashFiles('solver/CMakeLists.txt') == ''
+        run: echo "solver/CMakeLists.txt not found — skipping Docker build until solver is implemented"
