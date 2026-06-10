@@ -105,3 +105,87 @@ python scripts/run_trade_study.py
 # Run tests
 pytest tests/
 ```
+
+---
+
+## Development environment setup (Windows)
+
+Docker is the recommended way to run the tool reproducibly. The native setup below is for active development.
+
+### Required tools
+
+| Tool | Version | Purpose |
+|---|---|---|
+| Python | 3.13 | Pipeline orchestration |
+| Visual Studio 2022 Community | MSVC 19.34 | C++17 compiler + CMake |
+| Conan | 2.x | C++ dependency manager |
+| Docker Desktop | 4.41+ | Containerized execution |
+| WSL2 | 2.7+ | Required by Docker Desktop |
+
+### Python 3.13
+
+Download from [python.org](https://python.org). During install, check **"Add Python to PATH"**.
+
+```powershell
+python --version  # verify
+```
+
+### Visual Studio 2022 Community (C++ compiler + CMake)
+
+Download from [visualstudio.microsoft.com](https://visualstudio.microsoft.com). Select the **"Desktop development with C++"** workload — this installs MSVC and CMake together.
+
+Verify by opening **x64 Native Tools Command Prompt for VS 2022**:
+
+```cmd
+cl          # C++ compiler
+cmake --version
+```
+
+> `cl` is only on PATH inside the Developer Command Prompt. CMake and Conan locate it automatically — you never need to invoke `cl` directly for this project.
+
+### Conan 2.x
+
+Install from PowerShell (not Git Bash, not the Developer Command Prompt):
+
+```powershell
+pip install conan
+```
+
+Add the Python Scripts folder to your system PATH if it isn't already:
+`C:\Users\<username>\AppData\Local\Programs\Python\Python313\Scripts\`
+
+*Start menu → "Edit the system environment variables" → Environment Variables → System Variables → Path → Edit → New*
+
+Initialize the default Conan profile from the **Developer Command Prompt** so it detects MSVC:
+
+```cmd
+conan profile detect
+conan profile show  # verify MSVC is detected
+```
+
+### WSL2 + Docker Desktop
+
+Install WSL2 first (PowerShell as Administrator), then restart:
+
+```powershell
+wsl --install
+```
+
+Download **Docker Desktop for Windows (AMD64)** from [docker.com](https://docker.com). After install and restart, open Docker Desktop and wait for "Engine running".
+
+```powershell
+docker --version
+docker run hello-world  # verify
+```
+
+### Python virtual environment
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -e .
+```
+
+Activate the venv before running any pipeline commands locally each session. Conan is installed globally and does not go in the venv.
+
+> Docker is the source of truth for reproducible execution. The local setup is for development convenience only.
