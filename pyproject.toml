@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jet-engine-cycle-analysis"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "pandas",
+    "scipy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pipeline*"]

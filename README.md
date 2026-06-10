@@ -85,26 +85,53 @@ Plots are written to `outputs/`.
 
 ## Run natively
 
-**Prerequisites:** Python 3.11+, CMake 3.20+, Conan 2.x, a C++17 compiler.
+**Prerequisites:** Python 3.13, CMake 3.24+, Conan 2.29.0, a C++17 compiler. See [Development environment setup](#development-environment-setup-windows) below.
+
+**First time — create and activate the Python virtual environment:**
 
 ```bash
-# Build the C++ solver
+# Git Bash (repo root)
+bash scripts/setup_env.sh
+source ".venv\Scripts\activate"
+```
+
+**Every subsequent session — activate before doing anything else:**
+
+```bash
+source ".venv\Scripts\activate"   # Git Bash
+# or
+.venv\Scripts\activate          # PowerShell
+```
+
+**Build the C++ solver** (Developer Command Prompt, from repo root):
+
+```cmd
 cd solver
 conan install . --build=missing -s build_type=Release
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
+cd ..
+```
 
-# Install Python dependencies
-pip install -e ".[dev]"
+**Run the trade study** (Git Bash or PowerShell, venv active):
 
-# Run trade study
+```bash
 python scripts/run_trade_study.py
 ```
 
+**Run tests:**
+
 ```bash
-# Run tests
 pytest tests/
 ```
+
+**Deactivate the virtual environment when done:**
+
+```bash
+deactivate
+```
+
+> Conan is installed globally and must not be installed inside the venv. Always activate the venv before running Python pipeline commands locally.
 
 ---
 
@@ -180,12 +207,19 @@ docker run hello-world  # verify
 
 ### Python virtual environment
 
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -e .
+Run the setup script once from the repo root in Git Bash — it creates the venv and installs all dependencies from `pyproject.toml`:
+
+```bash
+bash scripts/setup_env.sh
 ```
 
-Activate the venv before running any pipeline commands locally each session. Conan is installed globally and does not go in the venv.
+| Action | Git Bash | PowerShell |
+|---|---|---|
+| Activate | `source ".venv\Scripts\activate"` | `.venv\Scripts\activate` |
+| Deactivate | `deactivate` | `deactivate` |
+| Add a dependency | edit `pyproject.toml`, then `pip install -e .` | same |
+| Check active venv | `which python` | `where python` |
 
-> Docker is the source of truth for reproducible execution. The local setup is for development convenience only.
+The venv prompt prefix `(.venv)` confirms it is active. Conan is installed globally and must not go inside the venv — it needs to detect MSVC from outside.
+
+> Docker is the source of truth for reproducible execution. The local venv setup is for development convenience only.
