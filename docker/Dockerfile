@@ -20,7 +20,7 @@ RUN conan install . --output-folder=build --build=missing \
 RUN cmake -B build \
     -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake \
     -DCMAKE_BUILD_TYPE=Release
-RUN cmake --build build
+RUN cmake --build build --config Release
 
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────

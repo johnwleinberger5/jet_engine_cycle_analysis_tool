@@ -106,12 +106,20 @@ source ".venv\Scripts\activate"   # Git Bash
 **Build the C++ solver** (Developer Command Prompt, from repo root):
 
 ```cmd
+bash build_solver.sh
+```
+
+Or manually:
+
+```cmd
 cd solver
-conan install . --build=missing -s build_type=Release
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+conan install . --output-folder=build --build=missing -s build_type=Release -s compiler.cppstd=17
+cmake -B build -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
 cd ..
 ```
+
+> CMake is only on PATH inside the Developer Command Prompt. Run build commands there, not in Git Bash or PowerShell.
 
 **Run the trade study** (Git Bash or PowerShell, venv active):
 
@@ -169,6 +177,27 @@ cmake --version
 ```
 
 > `cl` is only on PATH inside the Developer Command Prompt. CMake and Conan locate it automatically — you never need to invoke `cl` directly for this project.
+
+**Add CMake to your system PATH** so it can be found from Git Bash and PowerShell as well. First find the CMake binary installed by Visual Studio — run this in the Developer Command Prompt:
+
+```cmd
+where cmake
+```
+
+It will print something like:
+```
+C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe
+```
+
+Copy everything up to (and including) `\bin` — that is the directory to add. Then:
+
+*Start menu → "Edit the system environment variables" → Environment Variables → System variables → Path → Edit → New → paste the path → OK*
+
+Open a new terminal and verify:
+
+```bash
+cmake --version  # should work in Git Bash and PowerShell now
+```
 
 ### Conan 2.x
 

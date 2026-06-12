@@ -27,7 +27,7 @@ jobs:
       - name: Install C++ dependencies (Conan)
         if: hashFiles('solver/conanfile.txt') != ''
         working-directory: solver
-        run: conan install . --output-folder=build --build=missing -s build_type=Release
+        run: conan install . --output-folder=build --build=missing -s build_type=Release -s compiler.cppstd=17
 
       - name: Configure and build solver
         if: hashFiles('solver/CMakeLists.txt') != ''
@@ -36,7 +36,7 @@ jobs:
           cmake -B build \
             -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake \
             -DCMAKE_BUILD_TYPE=Release
-          cmake --build build
+          cmake --build build --config Release
 
       - name: Run C++ unit tests (CTest)
         if: hashFiles('solver/CMakeLists.txt') != ''
