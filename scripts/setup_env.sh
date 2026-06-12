@@ -22,7 +22,8 @@ else
 fi
 
 echo "Upgrading pip..."
-"$PIP" install --upgrade pip
+"$VENV_DIR/Scripts/python" -m pip install --upgrade pip 2>/dev/null \
+    || "$VENV_DIR/bin/python" -m pip install --upgrade pip
 
 echo "Installing project dependencies..."
 "$PIP" install -e ".[dev]"

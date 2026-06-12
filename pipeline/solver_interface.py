@@ -7,6 +7,7 @@ swapping the subprocess for a pybind11 module requires changes only here.
 """
 
 import json
+import os
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -16,9 +17,16 @@ from pipeline import constants
 def _find_solver_binary() -> Path:
     """Locate the solver binary, accounting for platform build layout.
 
-    - Linux/Mac (single-config): solver/build/solver
-    - Windows MSVC (multi-config): solver/build/Release/solver.exe
+    Resolution order:
+    1. ENGINE_SOLVER_PATH environment variable (explicit override; set in Docker)
+    2. __file__-relative paths (works for local editable installs)
+       - Linux/Mac (single-config): solver/build/solver
+       - Windows MSVC (multi-config): solver/build/Release/solver.exe
     """
+    env_path = os.environ.get("ENGINE_SOLVER_PATH")
+    if env_path:
+        return Path(env_path)
+
     base = Path(__file__).parent.parent / "solver" / "build"
     candidates = [
         base / "solver",

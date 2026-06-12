@@ -43,3 +43,8 @@ desktop.ini
 
 # Docs (auto-generated)
 docs/
+
+# ASCII Files
+*.log
+*.csv
+*.txt

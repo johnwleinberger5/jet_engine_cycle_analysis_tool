@@ -28,6 +28,10 @@ FROM python:3.13-slim AS runtime
 
 WORKDIR /app
 
+# Tells solver_interface._find_solver_binary() where to find the binary
+# regardless of what directory scripts are invoked from.
+ENV ENGINE_SOLVER_PATH=/app/solver/build/solver
+
 # Copy pyproject.toml and pipeline source, then install.
 # pipeline/ must be present for setuptools to register the package.
 # scripts/ is copied after so its changes don't bust the install layer.
