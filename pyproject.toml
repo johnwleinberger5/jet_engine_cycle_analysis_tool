@@ -7,16 +7,16 @@ name = "jet-engine-cycle-analysis"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
-    "numpy",
-    "matplotlib",
-    "pandas",
-    "scipy",
+    "numpy==2.2.6",
+    "matplotlib==3.10.3",
+    "pandas==2.2.3",
+    "scipy==1.15.3",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "pytest-cov",
+    "pytest==9.0.3",
+    "pytest-cov==7.1.0",
 ]
 
 [tool.setuptools.packages.find]

@@ -28,16 +28,17 @@ FROM python:3.13-slim AS runtime
 
 WORKDIR /app
 
-# Install Python dependencies first — isolated from source so pip cache
-# is only busted when pyproject.toml changes, not on every source edit
+# Copy pyproject.toml and pipeline source, then install.
+# pipeline/ must be present for setuptools to register the package.
+# scripts/ is copied after so its changes don't bust the install layer.
 COPY pyproject.toml .
-RUN pip install --no-cache-dir -e .
-
-# Copy source after install — changes here don't bust the pip layer
 COPY pipeline/ pipeline/
+RUN pip install --no-cache-dir .
+
 COPY scripts/ scripts/
 
 # Copy compiled solver binary from build stage
+# GCC single-config generator outputs to build/solver (no Release/ subdirectory)
 COPY --from=solver-build /build/solver/build/solver solver/build/solver
 
 # Write plots to /app/outputs — mount a host volume here to retrieve them:

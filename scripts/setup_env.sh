@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 VENV_DIR=".venv"
 
@@ -21,12 +21,18 @@ else
     exit 1
 fi
 
-echo "Installing dependencies..."
+echo "Upgrading pip..."
 "$PIP" install --upgrade pip
+
+echo "Installing project dependencies..."
 "$PIP" install -e ".[dev]"
 
+echo "Verifying installation..."
+"$VENV_DIR/Scripts/python" -c "import pytest; import pipeline" 2>/dev/null \
+    || "$VENV_DIR/bin/python" -c "import pytest; import pipeline"
+
 echo ""
-echo "Done. Activate your environment with:"
+echo "Setup complete. Activate your environment with:"
 if [ -f "$VENV_DIR/Scripts/activate" ]; then
     echo "  source .venv/Scripts/activate"
 else
