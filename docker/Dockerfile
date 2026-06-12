@@ -12,12 +12,14 @@ WORKDIR /build/solver
 COPY solver/ .
 
 RUN conan profile detect --force
-RUN conan install . --build=missing \
+RUN conan install . --output-folder=build --build=missing \
     -s build_type=Release \
     -s compiler=gcc \
     -s compiler.cppstd=17 \
     -s compiler.libcxx=libstdc++11
-RUN cmake -B build -DCMAKE_BUILD_TYPE=Release
+RUN cmake -B build \
+    -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake \
+    -DCMAKE_BUILD_TYPE=Release
 RUN cmake --build build
 
 
@@ -26,11 +28,14 @@ FROM python:3.13-slim AS runtime
 
 WORKDIR /app
 
-# Copy Python package and install dependencies
+# Install Python dependencies first — isolated from source so pip cache
+# is only busted when pyproject.toml changes, not on every source edit
 COPY pyproject.toml .
+RUN pip install --no-cache-dir -e .
+
+# Copy source after install — changes here don't bust the pip layer
 COPY pipeline/ pipeline/
 COPY scripts/ scripts/
-RUN pip install --no-cache-dir -e .
 
 # Copy compiled solver binary from build stage
 COPY --from=solver-build /build/solver/build/solver solver/build/solver

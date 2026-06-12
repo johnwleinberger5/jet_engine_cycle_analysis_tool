@@ -1,0 +1,7 @@
+[requires]
+spdlog/1.14.1
+nlohmann_json/3.11.3
+
+[generators]
+CMakeDeps
+CMakeToolchain
