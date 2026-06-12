@@ -2,6 +2,9 @@
 spdlog/1.14.1
 nlohmann_json/3.11.3
 
+[test_requires]
+catch2/3.7.1
+
 [generators]
 CMakeDeps
 CMakeToolchain

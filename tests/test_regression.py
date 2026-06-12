@@ -46,35 +46,25 @@ class TestReferenceOperatingPoint:
         return run_solver(MACH, OPR, tit_k=TIT_K, altitude_ft=ALT_FT,
                           solver_path=SOLVER_PATH)
 
-    def test_specific_thrust_in_physical_range(self, result):
-        # Supersonic turbojet at OPR 25 — expect 400–800 N/(kg/s)
-        assert 400.0 < result.specific_thrust_n_per_kgs < 800.0
+    def test_specific_thrust(self, result):
+        assert result.specific_thrust_n_per_kgs == pytest.approx(526.8542665308944, rel=1e-4)
 
-    def test_sfc_in_physical_range(self, result):
-        # Reasonable SFC range for this cycle — 2e-5 to 6e-5 kg/(s·N)
-        assert 2e-5 < result.sfc_kg_per_s_per_n < 6e-5
+    def test_sfc(self, result):
+        assert result.sfc_kg_per_s_per_n == pytest.approx(3.0116180637375054e-05, rel=1e-4)
 
     def test_six_stations(self, result):
         assert len(result.t0_stations_k) == 6
         assert len(result.p0_stations_pa) == 6
 
-    def test_temperature_increases_through_compressor(self, result):
-        assert result.t0_stations_k[2] > result.t0_stations_k[1]
+    def test_t0_stations(self, result):
+        expected = [341.8737, 341.8737, 927.9091495065514, 1600.0, 948.8495005482762, 948.8495005482762]
+        assert result.t0_stations_k == pytest.approx(expected, rel=1e-4)
 
-    def test_temperature_peaks_at_combustor_exit(self, result):
-        assert result.t0_stations_k[3] == pytest.approx(TIT_K, rel=1e-4)
-
-    def test_temperature_drops_through_turbine(self, result):
-        assert result.t0_stations_k[4] < result.t0_stations_k[3]
-
-    def test_pressure_increases_through_compressor(self, result):
-        assert result.p0_stations_pa[2] > result.p0_stations_pa[1]
-
-    def test_pressure_drops_through_turbine(self, result):
-        assert result.p0_stations_pa[4] < result.p0_stations_pa[3]
+    def test_p0_stations(self, result):
+        expected = [35398.16355546892, 30290.954713146763, 757273.867828669, 757273.867828669, 121625.23648519936, 121625.23648519936]
+        assert result.p0_stations_pa == pytest.approx(expected, rel=1e-4)
 
     def test_shock_reduces_total_pressure_at_inlet(self, result):
-        # Supersonic inlet — shock must reduce total pressure
         assert result.p0_stations_pa[1] < result.p0_stations_pa[0]
 
     def test_station_temperatures_all_positive(self, result):
