@@ -41,8 +41,8 @@ outputs/
 Thumbs.db
 desktop.ini
 
-# Docs (auto-generated)
-docs/
+# Docs — generated site output (source templates live in docs/)
+site/
 
 # ASCII Files
 *.log
