@@ -2,7 +2,7 @@
 set -euo pipefail
 
 IMAGE="engine-analysis"
-OUTPUTS_DIR="$(pwd)/outputs"
+OUTPUTS_DIR="$(pwd -W)/outputs"
 NO_CACHE=""
 
 for arg in "$@"; do

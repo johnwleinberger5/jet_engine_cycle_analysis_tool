@@ -47,17 +47,17 @@ class TestReferenceOperatingPoint:
                           solver_path=SOLVER_PATH)
 
     def test_specific_thrust(self, result):
-        assert result.specific_thrust_n_per_kgs == pytest.approx(526.8542665308944, rel=1e-4)
+        assert result.specific_thrust_n_per_kgs == pytest.approx(561.5582628478878, rel=1e-4)
 
     def test_sfc(self, result):
-        assert result.sfc_kg_per_s_per_n == pytest.approx(3.0116180637375054e-05, rel=1e-4)
+        assert result.sfc_kg_per_s_per_n == pytest.approx(2.8255016994940187e-05, rel=1e-4)
 
     def test_six_stations(self, result):
         assert len(result.t0_stations_k) == 6
         assert len(result.p0_stations_pa) == 6
 
     def test_t0_stations(self, result):
-        expected = [341.8737, 341.8737, 927.9091495065514, 1600.0, 948.8495005482762, 948.8495005482762]
+        expected = [341.8737, 341.8737, 927.9091495065514, 1600.0, 1013.9645504934485, 1013.9645504934485]
         assert result.t0_stations_k == pytest.approx(expected, rel=1e-4)
 
     def test_p0_stations(self, result):

@@ -99,11 +99,15 @@ TEST_CASE("Shock - recovery at M=1.7 matches verified value", "[shock]") {
 // Do not change without a physics justification.
 static const SolverInput REF_INPUT = {1.7, 25.0, 1600.0, 60000.0};
 
-static const double EXP_SPECIFIC_THRUST = 526.8542665308944;
-static const double EXP_SFC             = 3.0116180637375054e-05;
+// Performance values: updated after turbine isentropic efficiency fix.
+// T0[4] = T0[3] - compressor_work (power balance; independent of eta_t).
+// P0[4] unchanged — computed from isentropic equivalent temperature T0_4s.
+// specific_thrust and sfc confirmed from solver run after fix.
+static const double EXP_SPECIFIC_THRUST = 561.5582628478878;
+static const double EXP_SFC             = 2.8255016994940187e-05;
 
 static const std::array<double, 6> EXP_T0 = {
-    341.8737, 341.8737, 927.9091495065514, 1600.0, 948.8495005482762, 948.8495005482762
+    341.8737, 341.8737, 927.9091495065514, 1600.0, 1013.9645504934485, 1013.9645504934485
 };
 static const std::array<double, 6> EXP_P0 = {
     35398.16355546892, 30290.954713146763, 757273.867828669, 757273.867828669,

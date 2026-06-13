@@ -83,7 +83,7 @@ void EngineCycle::calculate_inlet() {
                       __FUNCTION__, input_.mach);
 }
 
-// Station 2 — compressor exit — isentropic compression with polytropic efficiency
+// Station 2 — compressor exit — isentropic compression with isentropic efficiency eta_c
 // T0_exit = T0_inlet * (1 + (OPR^((gamma-1)/gamma) - 1) / eta_c)
 // P0_exit = P0_inlet * OPR
 void EngineCycle::calculate_compressor() {
@@ -115,15 +115,20 @@ void EngineCycle::calculate_combustor() {
                   __FUNCTION__, t0_k_[3], p0_pa_[3], fuel_air_ratio_);
 }
 
-// Station 4 — turbine exit — power balance: compressor work = turbine work
-// T0_exit = TIT - (T0_compressor_exit - T0_inlet_station1) / eta_t
-// P0_exit from isentropic relation applied to actual exit temperature
+// Station 4 — turbine exit — power balance with isentropic efficiency eta_t
+// eta_t is turbine isentropic efficiency: actual_work = eta_t * ideal_work
+// Power balance (neglecting fuel mass fraction): cp*(T0[3]-T0[4]) = cp*(T0[2]-T0[1])
+//   => T0_exit = TIT - (T0_compressor_exit - T0_inlet)  [independent of eta_t]
+// Isentropic equivalent exit temperature (more pressure drop due to irreversibility):
+//   T0_4s = TIT - (T0_compressor_exit - T0_inlet) / eta_t
+// P0_exit = P0_inlet * (T0_4s / TIT)^(gamma/(gamma-1))
 void EngineCycle::calculate_turbine() {
     double compressor_work = t0_k_[2] - t0_k_[1];
-    t0_k_[4] = input_.tit_k - compressor_work / ETA_T;
+    t0_k_[4] = input_.tit_k - compressor_work;
 
-    double turbine_temp_ratio = t0_k_[4] / t0_k_[3];
-    p0_pa_[4] = p0_pa_[3] * std::pow(turbine_temp_ratio, GAMMA / (GAMMA - 1.0));
+    double t0_4s = input_.tit_k - compressor_work / ETA_T;
+    double isentropic_temp_ratio = t0_4s / t0_k_[3];
+    p0_pa_[4] = p0_pa_[3] * std::pow(isentropic_temp_ratio, GAMMA / (GAMMA - 1.0));
 
     if (t0_k_[4] <= 0.0)
         log_and_throw(__FUNCTION__, fmt::format(
@@ -131,8 +136,8 @@ void EngineCycle::calculate_turbine() {
             t0_k_[4]));
 
     spdlog::debug("[{}] Station 4 (turbine exit): compressor_work={:.2f} K, "
-                  "T0={:.2f} K, P0={:.1f} Pa",
-                  __FUNCTION__, compressor_work, t0_k_[4], p0_pa_[4]);
+                  "T0_4s={:.2f} K, T0={:.2f} K, P0={:.1f} Pa",
+                  __FUNCTION__, compressor_work, t0_4s, t0_k_[4], p0_pa_[4]);
 }
 
 // Station 5 — nozzle exit — isentropic expansion to ambient pressure
