@@ -31,7 +31,7 @@ The tool sweeps OPR (10–40) against Mach (0.5–1.7) at 60,000 ft, producing c
 | Layer | Technology |
 |---|---|
 | Physics solver | C++17, CMake, Conan |
-| Orchestration | Python 3.11, subprocess, numpy |
+| Orchestration | Python 3.13, subprocess, numpy |
 | Visualization | matplotlib |
 | Dependency management | Conan (C++), pyproject.toml (Python) |
 | Containerization | Docker (multi-stage build) |
@@ -74,12 +74,11 @@ Every push triggers a three-stage GitHub Actions workflow:
 
 ## Run with Docker (recommended)
 
-```powershell
-docker build -f docker/Dockerfile -t engine-analysis .
-docker run --rm -v "${PWD}/outputs:/app/outputs" engine-analysis
+```bash
+bash run_docker.sh
 ```
 
-Plots are written to `outputs/`.
+Plots are written to `outputs/`. Pass `--no-cache` to force a clean image rebuild.
 
 ---
 
@@ -92,15 +91,15 @@ Plots are written to `outputs/`.
 ```bash
 # Git Bash (repo root)
 bash scripts/setup_env.sh
-source ".venv\Scripts\activate"
+source .venv/Scripts/activate
 ```
 
 **Every subsequent session — activate before doing anything else:**
 
 ```bash
-source ".venv\Scripts\activate"   # Git Bash
+source .venv/Scripts/activate   # Git Bash
 # or
-.venv\Scripts\activate          # PowerShell
+.venv\Scripts\Activate.ps1      # PowerShell
 ```
 
 **Build the C++ solver** (Developer Command Prompt, from repo root):
@@ -127,10 +126,10 @@ cd ..
 python scripts/run_trade_study.py
 ```
 
-**Run tests:**
+**Run tests (C++ + Python):**
 
 ```bash
-pytest tests/
+bash run_tests.sh
 ```
 
 **Deactivate the virtual environment when done:**
@@ -244,7 +243,7 @@ bash scripts/setup_env.sh
 
 | Action | Git Bash | PowerShell |
 |---|---|---|
-| Activate | `source ".venv\Scripts\activate"` | `.venv\Scripts\activate` |
+| Activate | `source .venv/Scripts/activate` | `.venv\Scripts\Activate.ps1` |
 | Deactivate | `deactivate` | `deactivate` |
 | Add a dependency | edit `pyproject.toml`, then `pip install -e .` | same |
 | Check active venv | `which python` | `where python` |

@@ -66,8 +66,13 @@ mdot_f = mdot_a times cp times (TIT - T0_compressor_exit) divided by
 (eta_b times LHV)
 
 Station 4 — Turbine:
-Extracts work to drive compressor via power balance.
-T0_exit = TIT - (T0_compressor_exit - T0_inlet_station) divided by eta_t
+Extracts work to drive compressor via power balance with isentropic efficiency eta_t.
+Power balance (neglecting fuel mass fraction):
+T0_exit = TIT - (T0_compressor_exit - T0_inlet)
+Isentropic equivalent exit temperature (used for pressure calculation):
+T0_4s = TIT - (T0_compressor_exit - T0_inlet) divided by eta_t
+Turbine exit pressure from isentropic relation applied to T0_4s:
+P0_exit = P0_inlet times (T0_4s divided by TIT)^(gamma divided by (gamma-1))
 
 Station 5 — Nozzle:
 Isentropic expansion to ambient pressure. Exit velocity from stagnation

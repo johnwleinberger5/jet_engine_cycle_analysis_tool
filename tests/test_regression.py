@@ -4,9 +4,11 @@ These tests require the solver binary to be present at solver/build/solver.
 They are skipped automatically in environments where the binary is absent
 (e.g. CI runs that only install Python dependencies).
 
-Once the binary is built for the first time, the expected values below were
-verified by hand against the station-by-station equations in CLAUDE.md and
-should not be changed without a physics justification.
+Expected values were verified against the station-by-station equations in
+CLAUDE.md and confirmed from solver output. The turbine model uses isentropic
+efficiency (eta_t): T0[4] is set by the power balance independent of eta_t;
+P0[4] is derived from the isentropic equivalent exit temperature T0_4s.
+Do not change these values without a physics justification.
 
 Operating point under test: Mach 1.7, OPR 25, TIT 1600 K, alt 60,000 ft
 """
