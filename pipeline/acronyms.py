@@ -90,3 +90,7 @@ at ambient temperature.</dd>
 
 </dl>
 """
+
+# This module exists solely as a documentation page rendered by pdoc.
+# It contains no executable code.
+_DOCS_ONLY = True

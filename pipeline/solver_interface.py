@@ -3,7 +3,7 @@
 The solver binary is invoked as a subprocess. Inputs are serialized to JSON
 and written to the process stdin; results are read from stdout and
 deserialized. This module is the sole boundary between Python and C++ —
-swapping the subprocess for a pybind11 module requires changes only here.
+swapping the subprocess for a nanobind module requires changes only here.
 """
 
 import json
@@ -73,7 +73,7 @@ def run_solver(
 
     Serializes inputs to JSON, invokes the solver binary via subprocess,
     and deserializes the result. This is the sole interface boundary between
-    Python and C++; swapping the subprocess for a pybind11 module requires
+    Python and C++; swapping the subprocess for a nanobind module requires
     changes only here.
 
     Args:

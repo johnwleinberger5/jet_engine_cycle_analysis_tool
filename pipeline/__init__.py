@@ -15,8 +15,10 @@ engineering: a compiled C++ solver orchestrated by Python, containerised with Do
 and validated by a full
 <a href="pipeline/acronyms.html#CICD"><abbr title="Continuous Integration / Continuous Deployment">CI/CD</abbr></a>
 pipeline on every push. The physics are intentionally simplified — the emphasis is on
-software quality, clean architecture, and reproducible tooling applied to an honest
+software quality, clean architecture, and reproducible tooling applied to an
 aerospace problem.
+
+<p><em><a href="pipeline/changelog.html">Version history &amp; roadmap &rarr;</a></em></p>
 
 ---
 
@@ -98,5 +100,6 @@ ceiling.
 | [`plotting`][pipeline.plotting] | Contour plot generation |
 | [`physics`][pipeline.physics] | Physics reference — equations, assumptions, and limitations |
 | [`acronyms`][pipeline.acronyms] | Acronym reference table |
+| [`changelog`][pipeline.changelog] | Version history and planned improvements |
 
 """
