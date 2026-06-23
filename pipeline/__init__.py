@@ -49,20 +49,23 @@ The &#9733; marks a Symphony-like operating point
 
 At fixed
 <a href="pipeline/acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>,
-specific thrust rises with Mach as ram compression at the inlet does thermodynamic work
-the compressor does not have to — increasing
+specific thrust increases across the Mach sweep. Ram compression raises the inlet total
+pressure, increasing the nozzle expansion ratio and
+<a href="pipeline/acronyms.html#V_exit"><abbr title="Nozzle exit velocity">V_exit</abbr></a>
+faster than
+<a href="pipeline/acronyms.html#V_inlet"><abbr title="Inlet freestream velocity">V_inlet</abbr></a>
+grows. Higher
 <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
-adds diminishing returns at high Mach where the inlet already delivers substantial total
-pressure rise.
+adds diminishing returns at high Mach where ram already dominates the total pressure rise.
 
 <img src="sfc.png" width="84%" alt="SFC [mg/(s·N)] over OPR × Mach sweep"/>
 
 <a href="pipeline/acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>
-improves (decreases) with increasing
+decreases with increasing
 <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
-across the sweep, but the benefit flattens at high Mach where ram compression already
-dominates the cycle pressure rise and combustor temperature rise is constrained by the
-fixed
+across the sweep. The benefit flattens at high Mach because elevated inlet
+<a href="pipeline/acronyms.html#T0"><abbr title="Total (stagnation) temperature">T0</abbr></a>
+from ram compression reduces the combustor temperature rise available before the fixed
 <a href="pipeline/acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>
 ceiling.
 
@@ -70,23 +73,24 @@ ceiling.
 
 ## Key Takeaways
 
-- <strong>Specific thrust peaks near Mach 1.7 for this model.</strong> Ram inlet pressure recovery at
-  supersonic speeds amplifies the total cycle pressure ratio, driving nozzle exit velocity
-  (<a href="pipeline/acronyms.html#V_exit"><abbr title="Nozzle exit velocity">V_exit</abbr></a>)
-  to its highest values across the sweep.
+- <strong>Specific thrust is highest at Mach 1.7, the upper bound of this sweep.</strong>
+  Ram compression raises nozzle expansion pressure faster than flight velocity penalises
+  specific thrust across the 0.5–1.7 range; whether a true peak exists beyond Mach 1.7
+  is outside the sweep.
 
 - <strong>An optimal
   <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
-  exists at each Mach.</strong> Too low leaves compression energy unrealised; too high raises
-  compressor exit temperature toward
+  exists at each Mach for
+  <a href="pipeline/acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>.</strong>
+  Too low leaves thermal efficiency unrealised; too high drives compressor exit temperature
+  toward
   <a href="pipeline/acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>,
-  shrinking combustor temperature rise and degrading
-  <a href="pipeline/acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>.
+  collapsing the combustor temperature rise and specific thrust together.
 
-- <strong>The Symphony-like point (OPR 25, Mach 1.7) sits near the specific thrust peak for
-  its Mach regime</strong> while maintaining competitive
+- <strong>The Symphony-like point (OPR 25, Mach 1.7) sits in the high-thrust,
+  competitive-
   <a href="pipeline/acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>
-  — consistent with a design philosophy that prioritises supersonic cruise speed and range.
+  region of the sweep</strong> — consistent with a design prioritising supersonic cruise.
 
 ---
 
