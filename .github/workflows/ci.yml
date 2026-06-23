@@ -168,6 +168,14 @@ jobs:
         run: |
           bash scripts/build_docs.sh
 
+      - name: Verify site contents
+        run: |
+          test -f site/pipeline.html        || (echo "FAIL: pipeline.html missing" && exit 1)
+          test -f site/pipeline/changelog.html || (echo "FAIL: changelog.html missing" && exit 1)
+          test -f site/specific_thrust.png  || (echo "FAIL: specific_thrust.png missing" && exit 1)
+          test -f site/sfc.png              || (echo "FAIL: sfc.png missing" && exit 1)
+          echo "Site verification passed."
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
 

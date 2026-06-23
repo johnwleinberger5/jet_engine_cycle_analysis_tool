@@ -133,19 +133,18 @@ SFC             = f / (V_exit - V_inlet)     [kg/(N·s)]
 
 ## Model Assumptions & Limitations
 
-- **Calorically perfect gas** — gamma and cp are constant. Real gas properties vary
+- <strong>Calorically perfect gas</strong> — gamma and cp are constant. Real gas properties vary
   significantly with temperature above ~1000 K (NASA-7 polynomials would capture this).
-- **Fixed
-  <a href="acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>**
+- <strong>Fixed <a href="acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a></strong>
   — real engines vary TIT with throttle setting and altitude.
-- **Zero bypass ratio** — Symphony is a turbofan; bypass ratio is a key design variable
+- <strong>Zero bypass ratio</strong> — Symphony is a turbofan; bypass ratio is a key design variable
   omitted here for simplicity.
-- **Normal shock inlet** — at Mach 1.7 a normal shock gives ~86% total pressure recovery.
+- <strong>Normal shock inlet</strong> — at Mach 1.7 a normal shock gives ~86% total pressure recovery.
   Real supersonic inlets use oblique shock trains to achieve 95–98%.
-- **Zero combustor pressure drop** — real combustors drop ~3–5% of total pressure.
-- **Fuel mass fraction neglected** — the fuel-air ratio (~0.016) introduces a ~1.6% error
+- <strong>Zero combustor pressure drop</strong> — real combustors drop ~3–5% of total pressure.
+- <strong>Fuel mass fraction neglected</strong> — the fuel-air ratio (~0.016) introduces a ~1.6% error
   in the power balance and thrust calculation.
-- **Steady, 1D, single operating point** — no off-design analysis, no transients,
+- <strong>Steady, 1D, single operating point</strong> — no off-design analysis, no transients,
   no thermal soaking, no bleed air or cooling flows.
 
 ---

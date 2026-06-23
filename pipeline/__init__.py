@@ -8,15 +8,16 @@
 """
 # Jet Engine Cycle Analysis Tool
 
-<p style="color:#888; font-size:0.9em;">John Leinberger &middot; 2025</p>
+<p style="color:#888; font-size:0.9em;">John Leinberger &middot; 2026</p>
 
 A physics-based 1D Brayton cycle simulator demonstrating end-to-end production software
 engineering: a compiled C++ solver orchestrated by Python, containerised with Docker,
 and validated by a full
 <a href="pipeline/acronyms.html#CICD"><abbr title="Continuous Integration / Continuous Deployment">CI/CD</abbr></a>
-pipeline on every push. The physics are intentionally simplified — the emphasis is on
-software quality, clean architecture, and reproducible tooling applied to an
-aerospace problem.
+pipeline on every push.
+
+<p><strong>The emphasis is on production software engineering practices — the physics are
+representative but intentionally simplified.</strong></p>
 
 <p><em><a href="pipeline/changelog.html">Version history &amp; roadmap &rarr;</a></em></p>
 

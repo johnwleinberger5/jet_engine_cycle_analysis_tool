@@ -8,6 +8,8 @@ containerized with Docker, and validated by a full CI/CD pipeline on every push.
 See the [auto-generated documentation](https://johnwleinberger5.github.io/jet_engine_cycle_analysis_tool/)
 for physics, equations, assumptions, and a full module reference.
 
+> The emphasis is on production software engineering practices — the physics are representative but intentionally simplified.
+
 ---
 
 <p align="center"><img src="assets/jet_engine_cross_section.svg" width="680" alt="Jet engine cross-section diagram"/></p>
