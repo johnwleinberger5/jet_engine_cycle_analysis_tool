@@ -39,3 +39,14 @@ N_OPR: int = 30
 # Symphony-like reference operating point
 SYMPHONY_MACH: float = 1.7
 SYMPHONY_OPR: float = 25.0
+
+# LHS sweep bounds (used by LHSDataset)
+LHS_OPR_MIN: float = 10.0
+LHS_OPR_MAX: float = 40.0
+LHS_MACH_MIN: float = 0.5
+LHS_MACH_MAX: float = 1.7
+LHS_TIT_MIN: float = 1200.0   # K
+LHS_TIT_MAX: float = 1800.0   # K
+LHS_ALT_MIN: float = 20_000.0  # ft
+LHS_ALT_MAX: float = 70_000.0  # ft
+LHS_N_SAMPLES: int = 50_000
