@@ -25,11 +25,14 @@ if __name__ == "__main__":
     def _progress_callback(study: object, trial: object) -> None:
         n = trial.number + 1
         if n % print_every == 0:
+            try:
+                best_str = f"{_shape_str(study.best_trial.params)}  (val loss: {study.best_value:.6f})"
+            except ValueError:
+                best_str = "no successful trials yet"
             print(
                 f"  {n} / {_N_TRIALS} Optuna trials complete"
                 f"  |  this trial: {_shape_str(trial.params)}"
-                f"  |  best so far: {_shape_str(study.best_trial.params)}"
-                f"  (val loss: {study.best_value:.6f})",
+                f"  |  best so far: {best_str}",
                 flush=True,
             )
 

@@ -37,6 +37,11 @@ _DEFAULT_MODEL_PATH = Path("outputs/engine_regressor.pkl")
 _INPUT_COLS = ["opr", "mach", "tit_k", "altitude_ft"]
 _OUTPUT_COLS = ["specific_thrust_n_per_kgs", "sfc_kg_per_s_per_n"]
 
+# Indices of output columns to log-transform before z-scoring.
+# SFC spans orders of magnitude and has extreme values near zero thrust,
+# so training on log(SFC) produces a much smoother regression surface.
+_LOG_OUTPUT_COLS = [1]  # index of sfc_kg_per_s_per_n in _OUTPUT_COLS
+
 _TRAIN_FRAC = 0.70
 _VAL_FRAC = 0.15  # remaining 0.15 goes to test
 _SEED = 42
@@ -169,6 +174,10 @@ class EngineRegressor:
 
     def _prepare_data(self, df: pd.DataFrame) -> None:
         """Split DataFrame into train/test tensors and compute scale params."""
+        # Drop unphysical rows where any log-transformed output is non-positive
+        for i in _LOG_OUTPUT_COLS:
+            df = df[df[_OUTPUT_COLS[i]] > 0]
+
         x_raw = df[_INPUT_COLS].values.astype(np.float32)
         y_raw = df[_OUTPUT_COLS].values.astype(np.float32)
 
@@ -180,27 +189,39 @@ class EngineRegressor:
         val_idx = idx[n_train:n_train + n_val]
         test_idx = idx[n_train + n_val:]
 
-        # Fit normalization on training set only
+        # Log-transform skewed outputs before fitting normalization stats
+        y_log = y_raw.copy()
+        y_log[:, _LOG_OUTPUT_COLS] = np.log(y_log[:, _LOG_OUTPUT_COLS])
+
+        # Fit normalization on training set only (using log-transformed values)
         self._x_mean = x_raw[train_idx].mean(axis=0)
         self._x_std = x_raw[train_idx].std(axis=0) + 1e-8
-        self._y_mean = y_raw[train_idx].mean(axis=0)
-        self._y_std = y_raw[train_idx].std(axis=0) + 1e-8
+        self._y_mean = y_log[train_idx].mean(axis=0)
+        self._y_std = y_log[train_idx].std(axis=0) + 1e-8
+
+        # Z-score the already-logged outputs (no second log)
+        def _zscore(y: np.ndarray) -> torch.Tensor:
+            return torch.tensor(((y - self._y_mean) / self._y_std).astype(np.float32))
 
         self._x_train = torch.tensor(self._scale_inputs(x_raw[train_idx]))
-        self._y_train = torch.tensor(self._scale_outputs(y_raw[train_idx]))
+        self._y_train = _zscore(y_log[train_idx])
         self._x_val = torch.tensor(self._scale_inputs(x_raw[val_idx]))
-        self._y_val = torch.tensor(self._scale_outputs(y_raw[val_idx]))
+        self._y_val = _zscore(y_log[val_idx])
         self._x_test = torch.tensor(self._scale_inputs(x_raw[test_idx]))
-        self._y_test = torch.tensor(self._scale_outputs(y_raw[test_idx]))
+        self._y_test = _zscore(y_log[test_idx])
 
     def _scale_inputs(self, x: np.ndarray) -> np.ndarray:
         return ((x - self._x_mean) / self._x_std).astype(np.float32)
 
     def _scale_outputs(self, y: np.ndarray) -> np.ndarray:
+        y = y.copy()
+        y[:, _LOG_OUTPUT_COLS] = np.log(y[:, _LOG_OUTPUT_COLS])
         return ((y - self._y_mean) / self._y_std).astype(np.float32)
 
     def _unscale_outputs(self, y_norm: np.ndarray) -> np.ndarray:
-        return (y_norm * self._y_std + self._y_mean).astype(np.float64)
+        y = (y_norm * self._y_std + self._y_mean).astype(np.float64)
+        y[:, _LOG_OUTPUT_COLS] = np.exp(y[:, _LOG_OUTPUT_COLS])
+        return y
 
     def _build_model(self, hidden_sizes: tuple[int, int, int]) -> _MLP:
         return _MLP(n_inputs=len(_INPUT_COLS), n_outputs=len(_OUTPUT_COLS),
@@ -236,10 +257,10 @@ class EngineRegressor:
         """Run Optuna to find best hidden layer sizes, then train final model."""
         def objective(trial: optuna.Trial) -> float:
             h1 = trial.suggest_int("h1", 8, 64)
-            h2 = trial.suggest_int("h2", 8, 32)
-            h3 = trial.suggest_int("h3", 8, 32)
+            h2 = trial.suggest_int("h2", 8, 64)
+            h3 = trial.suggest_int("h3", 8, 64)
             m = self._build_model((h1, h2, h3))
-            return self._fit(m, epochs=50)
+            return self._fit(m, epochs=20)
 
         study = optuna.create_study(direction="minimize")
         callbacks = [callback] if callback is not None else []

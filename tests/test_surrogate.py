@@ -10,7 +10,7 @@ from pipeline.surrogate import EngineRegressor, _INPUT_COLS, _OUTPUT_COLS
 from pipeline.lhs_study import LHSDataset
 
 
-def _make_synthetic_df(n: int = 200) -> pd.DataFrame:
+def _make_synthetic_df(n: int = 500) -> pd.DataFrame:
     rng = np.random.default_rng(0)
     return pd.DataFrame({
         "opr": rng.uniform(10, 40, n),
@@ -18,7 +18,7 @@ def _make_synthetic_df(n: int = 200) -> pd.DataFrame:
         "tit_k": rng.uniform(1200, 1800, n),
         "altitude_ft": rng.uniform(20_000, 70_000, n),
         "specific_thrust_n_per_kgs": rng.uniform(100, 800, n),
-        "sfc_kg_per_s_per_n": rng.uniform(1e-5, 3e-5, n),
+        "sfc_kg_per_s_per_n": rng.uniform(5e-6, 5e-5, n),
     })
 
 
