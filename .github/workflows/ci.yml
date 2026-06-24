@@ -164,16 +164,24 @@ jobs:
           name: trade-study-plots
           path: outputs/
 
+      - name: Copy committed surrogate artifacts into outputs/
+        run: |
+          mkdir -p outputs
+          find . -maxdepth 2 \( -name "*.gif" -o -name "r2_score.png" \) -not -path "./outputs/*" -exec cp {} outputs/ \; || true
+
       - name: Build docs site
         run: |
           bash scripts/build_docs.sh
 
       - name: Verify site contents
         run: |
-          test -f site/pipeline.html        || (echo "FAIL: pipeline.html missing" && exit 1)
-          test -f site/pipeline/changelog.html || (echo "FAIL: changelog.html missing" && exit 1)
-          test -f site/specific_thrust.png  || (echo "FAIL: specific_thrust.png missing" && exit 1)
-          test -f site/sfc.png              || (echo "FAIL: sfc.png missing" && exit 1)
+          test -f site/pipeline.html                          || (echo "FAIL: pipeline.html missing" && exit 1)
+          test -f site/pipeline/changelog.html               || (echo "FAIL: changelog.html missing" && exit 1)
+          test -f site/specific_thrust.png                   || (echo "FAIL: specific_thrust.png missing" && exit 1)
+          test -f site/sfc.png                               || (echo "FAIL: sfc.png missing" && exit 1)
+          test -f site/pipeline/surrogate_tit_sweep.gif        || (echo "FAIL: surrogate_tit_sweep.gif missing" && exit 1)
+          test -f site/pipeline/surrogate_tit_sweep_thrust.gif  || (echo "FAIL: surrogate_tit_sweep_thrust.gif missing" && exit 1)
+          test -f site/pipeline/r2_score.png                    || (echo "FAIL: r2_score.png missing" && exit 1)
           echo "Site verification passed."
 
       - name: Configure GitHub Pages

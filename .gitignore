@@ -26,8 +26,10 @@ solver/build/
 solver/.conan/
 solver/CMakeUserPresets.json
 
-# Outputs (generated at runtime)
+# Outputs (generated at runtime) — plots and GIFs are tracked for docs
 outputs/
+!outputs/*.gif
+!outputs/r2_score.png
 
 # IDEs
 .vscode/
