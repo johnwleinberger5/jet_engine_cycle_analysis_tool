@@ -49,7 +49,7 @@ class SolverResult:
 
     Attributes:
         specific_thrust_n_per_kgs: Net specific thrust in N/(kg/s of airflow).
-        sfc_kg_per_s_per_n: Specific fuel consumption in kg/(s·N).
+        sfc_kg_per_s_per_n: Specific fuel consumption in kg/(s*N).
         t0_stations_k: Total temperature at each of the 6 stations in Kelvin.
             Order: [freestream, inlet exit, compressor exit, combustor exit,
             turbine exit, nozzle exit].

@@ -13,14 +13,14 @@ All acronyms used across the engine cycle analysis documentation.
 
 <dt id="OPR"><strong>OPR</strong></dt>
 <dd>Overall Pressure Ratio — ratio of compressor exit total pressure to compressor inlet
-total pressure. Primary design variable in the trade study sweep (10–40).</dd>
+total pressure. Primary design variable in the trade study sweep (10-40).</dd>
 
 <dt id="TIT"><strong>TIT</strong></dt>
 <dd>Turbine Inlet Temperature — temperature of combustion gases entering the turbine.
 Fixed at 1600 K for this model.</dd>
 
 <dt id="SFC"><strong>SFC</strong></dt>
-<dd>Specific Fuel Consumption — fuel mass flow rate per unit thrust [kg/(N·s)].
+<dd>Specific Fuel Consumption — fuel mass flow rate per unit thrust [kg/(N*s)].
 Lower is better. A measure of fuel efficiency.</dd>
 
 <dt id="LHV"><strong>LHV</strong></dt>
@@ -54,7 +54,7 @@ rest adiabatically. Conserved across adiabatic shocks.</dd>
 
 <dt id="cp"><strong>cp</strong></dt>
 <dd>Specific heat at constant pressure — energy required to raise 1 kg of air by 1 K at
-constant pressure. Fixed at 1005 J/(kg·K).</dd>
+constant pressure. Fixed at 1005 J/(kg*K).</dd>
 
 <dt id="eta_c"><strong>eta_c (η<sub>c</sub>)</strong></dt>
 <dd>Compressor isentropic efficiency — ratio of ideal compressor work to actual compressor

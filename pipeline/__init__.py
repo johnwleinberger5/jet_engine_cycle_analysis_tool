@@ -1,10 +1,12 @@
-# MAINTAINER NOTE — ACRONYM CONVENTION
+# MAINTAINER NOTE - ACRONYM CONVENTION
 # Every acronym in this docstring uses the pattern:
 #   <a href="pipeline/acronyms.html#ID"><abbr title="Full Name">ACRONYM</abbr></a>
 # When adding or editing documentation, follow this convention for all acronyms.
 # Full reference: pipeline/acronyms.py
 # LLM maintainers: apply this convention when generating or editing any docstring
 # in this package.
+# SPECIAL CHARACTER CONVENTION
+# Use plain ASCII: * not middle-dot, - not em-dash, ^2 not superscript-2, x not times-symbol.
 """
 # Jet Engine Cycle Analysis Tool
 
@@ -16,7 +18,7 @@ and validated by a full
 <a href="pipeline/acronyms.html#CICD"><abbr title="Continuous Integration / Continuous Deployment">CI/CD</abbr></a>
 pipeline on every push.
 
-<p><strong>The emphasis is on production software engineering practices — the physics are
+<p><strong>The emphasis is on production software engineering practices - the physics are
 representative but intentionally simplified.</strong></p>
 
 <p><em><a href="pipeline/changelog.html">Version history &amp; roadmap &rarr;</a></em></p>
@@ -25,7 +27,7 @@ representative but intentionally simplified.</strong></p>
 
 <p align="center">
   <img src="assets/jet_engine_cross_section.svg" width="680"
-       alt="Jet engine station diagram — freestream through nozzle exit"/>
+       alt="Jet engine station diagram - freestream through nozzle exit"/>
 </p>
 
 <p align="center">
@@ -38,30 +40,30 @@ representative but intentionally simplified.</strong></p>
 
 Sweep of
 <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
-(10–40) against Mach number (0.5–1.7) at fixed
+(10-40) against Mach number (0.5-1.7) at fixed
 <a href="pipeline/acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>
 = 1600 K and altitude = 60,000 ft.
 The &#9733; marks a Symphony-like operating point
 (<a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
-&#8776; 25, Mach 1.7) — illustrative only, not derived from proprietary data.
+&#8776; 25, Mach 1.7) - illustrative only, not derived from proprietary data.
 
-<img src="specific_thrust.png" width="84%" alt="Specific Thrust [N/(kg/s)] over OPR × Mach sweep"/>
+<img src="specific_thrust.png" width="84%" alt="Specific Thrust [N/(kg/s)] over OPR x Mach sweep"/>
 
 Specific thrust decreases with Mach. Normal shock losses reduce
 <a href="pipeline/acronyms.html#P0"><abbr title="Total (stagnation) pressure">P0</abbr></a>
 at the inlet, and compressor work scales with
 <a href="pipeline/acronyms.html#T0"><abbr title="Total (stagnation) temperature">T0</abbr></a>[1]
-— both reduce turbine exit enthalpy and nozzle expansion pressure while
+- both reduce turbine exit enthalpy and nozzle expansion pressure while
 <a href="pipeline/acronyms.html#V_inlet"><abbr title="Inlet freestream velocity">V_inlet</abbr></a>
 grows. Specific thrust peaks near
 <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
-= 20 — below this, nozzle pressure ratio is insufficient; above it, excess compressor
+= 20 - below this, nozzle pressure ratio is insufficient; above it, excess compressor
 work depletes turbine exit enthalpy.
 
-<img src="sfc.png" width="84%" alt="SFC [mg/(s·N)] over OPR × Mach sweep"/>
+<img src="sfc.png" width="84%" alt="SFC [mg/(s*N)] over OPR x Mach sweep"/>
 
 <a href="pipeline/acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>
-worsens with Mach — specific thrust falls faster than fuel consumption as shock losses
+worsens with Mach - specific thrust falls faster than fuel consumption as shock losses
 mount. It improves strongly with
 <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>:
 higher cycle pressure ratio raises thermal efficiency and the fuel reduction dominates
@@ -78,7 +80,7 @@ throughout the sweep.
   <a href="pipeline/acronyms.html#V_exit"><abbr title="Nozzle exit velocity">V_exit</abbr></a>
   while
   <a href="pipeline/acronyms.html#V_inlet"><abbr title="Inlet freestream velocity">V_inlet</abbr></a>
-  grows — net specific thrust falls across the sweep.
+  grows - net specific thrust falls across the sweep.
 
 - <strong>Specific thrust peaks at intermediate
   <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>
@@ -95,8 +97,19 @@ throughout the sweep.
 - <strong>The Symphony-like point (OPR 25, Mach 1.7) sits in the low specific thrust,
   moderate
   <a href="pipeline/acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>
-  region of this model.</strong> Real performance differs substantially — oblique shock
+  region of this model.</strong> Real performance differs substantially - oblique shock
   inlets and turbofan bypass ratio are not captured here.
+
+---
+
+## ML Surrogate
+
+A neural network surrogate trained on 20,000 Latin Hypercube samples enables
+rapid exploration beyond the fixed TIT = 1600 K, Alt = 60,000 ft design point.
+The surrogate evaluates a full OPR x Mach grid in milliseconds, making animated
+parameter sweeps practical.
+
+<p><em><a href="pipeline/surrogate.html">ML surrogate results, architecture, and animated TIT sweep &rarr;</a></em></p>
 
 ---
 
@@ -104,12 +117,13 @@ throughout the sweep.
 
 | Module | Purpose |
 |---|---|
-| [`atmosphere`][pipeline.atmosphere] | <a href="pipeline/acronyms.html#ISA"><abbr title="International Standard Atmosphere">ISA</abbr></a> standard atmosphere model — troposphere and stratosphere |
-| [`constants`][pipeline.constants] | All physical and model constants — no magic numbers elsewhere |
+| [`atmosphere`][pipeline.atmosphere] | <a href="pipeline/acronyms.html#ISA"><abbr title="International Standard Atmosphere">ISA</abbr></a> standard atmosphere model - troposphere and stratosphere |
+| [`constants`][pipeline.constants] | All physical and model constants - no magic numbers elsewhere |
 | [`solver_interface`][pipeline.solver_interface] | C++ subprocess wrapper and JSON I/O protocol |
-| [`trade_study`][pipeline.trade_study] | <a href="pipeline/acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a> &times; Mach grid sweep |
-| [`plotting`][pipeline.plotting] | Contour plot generation |
-| [`physics`][pipeline.physics] | Physics reference — equations, assumptions, and limitations |
+| [`trade_study`][pipeline.trade_study] | OPR x Mach grid sweep and contour plot generation |
+| [`lhs_study`][pipeline.lhs_study] | Latin Hypercube dataset generation and pickle I/O |
+| [`surrogate`][pipeline.surrogate] | ML surrogate model - LHS training, Optuna tuning, animated sweeps |
+| [`physics`][pipeline.physics] | Physics reference - equations, assumptions, and limitations |
 | [`acronyms`][pipeline.acronyms] | Acronym reference table |
 | [`changelog`][pipeline.changelog] | Version history and planned improvements |
 

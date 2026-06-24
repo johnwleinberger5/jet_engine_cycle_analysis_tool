@@ -9,8 +9,8 @@
 namespace atmosphere {
 
 // ISA standard atmosphere
-// Troposphere  (0 – 11 000 m): T decreases at 6.5 K/km, P by hydrostatic integral
-// Stratosphere (11 000 – 20 000 m): isothermal at 216.65 K
+// Troposphere  (0 - 11 000 m): T decreases at 6.5 K/km, P by hydrostatic integral
+// Stratosphere (11 000 - 20 000 m): isothermal at 216.65 K
 AmbientConditions get_ambient_conditions(double altitude_ft) {
     using namespace constants;
 

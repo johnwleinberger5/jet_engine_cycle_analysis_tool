@@ -8,7 +8,7 @@ containerized with Docker, and validated by a full CI/CD pipeline on every push.
 See the [auto-generated documentation](https://johnwleinberger5.github.io/jet_engine_cycle_analysis_tool/)
 for physics, equations, assumptions, and a full module reference.
 
-> The emphasis is on production software engineering practices — the physics are representative but intentionally simplified.
+> The emphasis is on production software engineering practices - the physics are representative but intentionally simplified.
 
 ---
 
@@ -27,13 +27,13 @@ for physics, equations, assumptions, and a full module reference.
 | Conan 2.x | C++ dependency manager |
 | Docker Desktop | Containerized execution (optional) |
 
-> CMake must be on PATH outside the Developer Command Prompt — see the Conan profile
+> CMake must be on PATH outside the Developer Command Prompt - see the Conan profile
 > setup step below. Conan must be installed globally (not inside the venv), along with
 > its dependencies: `pip install conan colorama` (run outside the venv).
 
 ---
 
-### 1 — Set up the Python environment
+### 1 - Set up the Python environment
 
 Run once from the repo root in Git Bash:
 
@@ -51,7 +51,7 @@ source .venv/Scripts/activate   # Git Bash
 
 ---
 
-### 2 — Build the C++ solver
+### 2 - Build the C++ solver
 
 Run from the repo root (venv does not need to be active):
 
@@ -76,7 +76,7 @@ Flags:
 
 ---
 
-### 3 — Run tests
+### 3 - Run tests
 
 Runs C++ tests (CTest) and Python tests (pytest). Requires the solver to be built and the venv active:
 
@@ -86,15 +86,15 @@ bash run_tests.sh
 
 ---
 
-### 4 — Run the trade study
+### 4 - Run the trade study
 
-**Option A — Local** (venv active, solver built):
+**Option A - Local** (venv active, solver built):
 
 ```bash
 python scripts/run_trade_study.py
 ```
 
-**Option B — Docker** (no local build required):
+**Option B - Docker** (no local build required):
 
 ```bash
 bash run_docker.sh
@@ -111,7 +111,26 @@ Plots are written to `outputs/` in both cases.
 
 ---
 
-### 5 — Build documentation
+### 5 - Run the ML surrogate (optional)
+
+Requires the venv active and the solver built. Steps run independently - regenerate only what has changed.
+
+```bash
+# Generate LHS dataset (~20k solver calls, ~5 min)
+python scripts/run_lhs_study.py
+
+# Train surrogate model (50 Optuna trials, ~10 min)
+python scripts/train_surrogate.py
+
+# Generate animated GIF sweeps
+python scripts/run_surrogate_gif.py
+```
+
+Outputs written to `outputs/`: `lhs_dataset.pkl`, `engine_regressor.pkl`, `r2_score.png`, `surrogate_tit_sweep.gif`, `surrogate_tit_sweep_thrust.gif`.
+
+---
+
+### 6 - Build documentation
 
 Requires the trade study to have been run first (plots must exist in `outputs/`):
 

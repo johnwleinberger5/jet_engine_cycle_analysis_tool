@@ -43,7 +43,7 @@ SolverOutput EngineCycle::run() {
     if (specific_thrust <= 0.0)
         spdlog::warn("Non-positive specific thrust: {:.2f} N/(kg/s) — check inputs", specific_thrust);
 
-    spdlog::info("Cycle complete: specific_thrust={:.2f} N/(kg/s), SFC={:.6f} kg/(s·N)",
+    spdlog::info("Cycle complete: specific_thrust={:.2f} N/(kg/s), SFC={:.6f} kg/(s*N)",
                  specific_thrust, sfc);
 
     return {specific_thrust, sfc, t0_k_, p0_pa_};

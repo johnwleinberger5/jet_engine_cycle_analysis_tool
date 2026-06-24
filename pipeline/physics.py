@@ -109,7 +109,7 @@ P0[5]  = P0[4]   (isentropic nozzle preserves total pressure)
 
 ```
 Specific thrust = V_exit - V_inlet           [N/(kg/s)]
-SFC             = f / (V_exit - V_inlet)     [kg/(N·s)]
+SFC             = f / (V_exit - V_inlet)     [kg/(N*s)]
 ```
 
 ---
@@ -122,8 +122,8 @@ SFC             = f / (V_exit - V_inlet)     [kg/(N·s)]
 | <a href="acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a> | 1600 K | Fixed turbine inlet temperature |
 | Bypass ratio | 0 | Pure turbojet — no fan or bypass stream |
 | <a href="acronyms.html#gamma"><abbr title="Ratio of specific heats">gamma</abbr></a> | 1.4 | Calorically perfect air |
-| <a href="acronyms.html#cp"><abbr title="Specific heat at constant pressure">cp</abbr></a> | 1005 J/(kg·K) | Specific heat at constant pressure |
-| R | 287.05 J/(kg·K) | Specific gas constant for air |
+| <a href="acronyms.html#cp"><abbr title="Specific heat at constant pressure">cp</abbr></a> | 1005 J/(kg*K) | Specific heat at constant pressure |
+| R | 287.05 J/(kg*K) | Specific gas constant for air |
 | <a href="acronyms.html#eta_c"><abbr title="Compressor isentropic efficiency">eta_c</abbr></a> | 0.88 | Compressor isentropic efficiency |
 | <a href="acronyms.html#eta_t"><abbr title="Turbine isentropic efficiency">eta_t</abbr></a> | 0.90 | Turbine isentropic efficiency |
 | <a href="acronyms.html#eta_b"><abbr title="Combustor efficiency">eta_b</abbr></a> | 0.99 | Combustor efficiency |
@@ -140,8 +140,8 @@ SFC             = f / (V_exit - V_inlet)     [kg/(N·s)]
 - <strong>Zero bypass ratio</strong> — Symphony is a turbofan; bypass ratio is a key design variable
   omitted here for simplicity.
 - <strong>Normal shock inlet</strong> — at Mach 1.7 a normal shock gives ~86% total pressure recovery.
-  Real supersonic inlets use oblique shock trains to achieve 95–98%.
-- <strong>Zero combustor pressure drop</strong> — real combustors drop ~3–5% of total pressure.
+  Real supersonic inlets use oblique shock trains to achieve 95-98%.
+- <strong>Zero combustor pressure drop</strong> — real combustors drop ~3-5% of total pressure.
 - <strong>Fuel mass fraction neglected</strong> — the fuel-air ratio (~0.016) introduces a ~1.6% error
   in the power balance and thrust calculation.
 - <strong>Steady, 1D, single operating point</strong> — no off-design analysis, no transients,

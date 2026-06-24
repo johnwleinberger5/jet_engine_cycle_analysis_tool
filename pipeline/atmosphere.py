@@ -1,7 +1,7 @@
 """ISA standard atmosphere model.
 
-Covers the troposphere (0–11,000 m) with a linear temperature lapse and
-the lower stratosphere (11,000–20,000 m) isothermal layer. Valid from sea
+Covers the troposphere (0-11,000 m) with a linear temperature lapse and
+the lower stratosphere (11,000-20,000 m) isothermal layer. Valid from sea
 level through the stratosphere — sufficient for the 60,000 ft cruise altitude
 used in the trade study.
 """

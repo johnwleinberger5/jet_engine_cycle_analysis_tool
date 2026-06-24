@@ -2,7 +2,7 @@
 
 import pytest
 from pathlib import Path
-from pipeline.io_utils import read_pkl, write_pkl
+from pipeline.lhs_study import read_pkl, write_pkl
 
 
 def test_write_and_read_roundtrip(tmp_path):

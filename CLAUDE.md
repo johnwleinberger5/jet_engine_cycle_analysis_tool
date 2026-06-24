@@ -47,7 +47,7 @@ in the auto-generated docs).
 ## Physics — What We're Modeling
 
 A 1D Brayton cycle engine model with the following station-by-station flow.
-Stations are indexed 0–5 throughout the code and documentation.
+Stations are indexed 0-5 throughout the code and documentation.
 
 Station 0 — Freestream (isentropic ram):
 Standard atmosphere at fixed altitude (60,000 ft) sets ambient P, T, density.
@@ -98,7 +98,7 @@ P0[5] = P0[4]   (isentropic nozzle)
 Performance Outputs:
 ```
 Specific thrust = V_exit - V_inlet   [N/(kg/s)]
-SFC = f / (V_exit - V_inlet)         [kg/(N·s)]
+SFC = f / (V_exit - V_inlet)         [kg/(N*s)]
 ```
 
 ## Fixed Parameters
@@ -107,7 +107,7 @@ SFC = f / (V_exit - V_inlet)         [kg/(N·s)]
 - TIT: 1600 K (fixed for base trade study)
 - Bypass ratio: 0 (pure turbojet)
 - gamma: 1.4 (calorically perfect gas)
-- cp: 1005 J/(kg·K)
+- cp: 1005 J/(kg*K)
 - eta_c (compressor isentropic efficiency): 0.88
 - eta_t (turbine isentropic efficiency): 0.90
 - eta_b (combustor efficiency): 0.99
@@ -115,11 +115,11 @@ SFC = f / (V_exit - V_inlet)         [kg/(N·s)]
 
 ## Trade Study
 
-Sweep: OPR (10–40, 30 steps) × Mach (0.5–1.7, 26 steps)
+Sweep: OPR (10-40, 30 steps) × Mach (0.5-1.7, 26 steps)
 Fixed: TIT = 1600 K, altitude = 60,000 ft
 Outputs:
 - Specific thrust grid plot (N/(kg/s))
-- SFC grid plot (mg/(s·N)) — scaled from kg/(N·s) for readability
+- SFC grid plot (mg/(s*N)) — scaled from kg/(N*s) for readability
 - Both plots with a representative Symphony-like operating point marked
   (OPR ≈ 25, Mach 1.7 — illustrative only, not derived from proprietary data)
 

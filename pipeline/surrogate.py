@@ -1,23 +1,119 @@
-"""Neural network surrogate model for fast engine cycle prediction.
+"""# ML Surrogate Model
 
-<a href="surrogate.html#EngineRegressor"><code>EngineRegressor</code></a>
-wraps a PyTorch MLP trained on a
-<a href="lhs_study.html#LHSDataset"><code>LHSDataset</code></a>.
-Architecture hyperparameters (nodes per hidden layer) are tuned by
-<a href="https://optuna.org">Optuna</a>.
+<p style="color:#888; font-size:0.9em;">v0.2.0</p>
 
-The trained model predicts
-<a href="acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>
-and specific thrust from four inputs:
+A neural network surrogate trained on
+<a href="lhs_study.html">Latin Hypercube Sampling</a>
+data to predict engine cycle performance across a four-dimensional input space —
 <a href="acronyms.html#OPR"><abbr title="Overall Pressure Ratio">OPR</abbr></a>,
 Mach,
 <a href="acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>,
-and altitude.
+and altitude — at a fraction of the cost of calling the C++ solver.
+
+<p><em><a href="index.html">Back to trade study results &rarr;</a></em></p>
+
+---
+
+## Why a Surrogate?
+
+The C++ solver evaluates one operating point at a time. The base trade study
+(30 x 26 = 780 solver calls) is fast, but sweeping a third or fourth variable
+(e.g. animating over
+<a href="acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>
+or altitude) would require thousands of calls per frame. The surrogate
+evaluates an entire OPR x Mach grid in milliseconds, making animated sweeps
+and interactive exploration practical.
+
+---
+
+## Data Generation - Latin Hypercube Sampling
+
+<a href="lhs_study.html#LHSDataset"><code>LHSDataset</code></a> uses
+<code>scipy.stats.qmc.LatinHypercube</code> to generate a space-filling
+design over the four-dimensional input space. Unlike a full-factorial grid,
+LHS guarantees uniform marginal coverage - no input dimension is
+over- or under-sampled.
+
+Sweep bounds:
+
+| Input | Min | Max |
+|---|---|---|
+| OPR | 10 | 40 |
+| Mach | 0.5 | 1.7 |
+| TIT (K) | 1200 | 1800 |
+| Altitude (ft) | 20,000 | 70,000 |
+
+Default dataset: 20,000 samples, seed = 42 for reproducibility.
+
+---
+
+## Model Architecture
+
+<a href="surrogate.html#EngineRegressor"><code>EngineRegressor</code></a>
+is a three-hidden-layer MLP (4 inputs -> h1 -> h2 -> h3 -> 2 outputs)
+implemented in PyTorch. Nodes per hidden layer are tuned by
+<a href="https://optuna.org">Optuna</a> (50 trials, minimizing validation loss).
+
+Data split: 70% train / 15% validation / 15% test. Optuna tunes against
+the validation set only - the test set is held out until final R^2 scoring,
+ensuring no data leakage into hyperparameter selection.
+
+<a href="acronyms.html#SFC"><abbr title="Specific Fuel Consumption">SFC</abbr></a>
+is log-transformed before training because it spans orders of magnitude and
+has extreme values near zero specific thrust. The network learns log(SFC)
+and the inverse transform is applied on prediction.
+
+---
+
+## R^2 Results
+
+<img src="r2_score.png" width="84%" alt="R^2 train and test scores for specific thrust and SFC"/>
+
+---
+
+## TIT Sweep - Specific Thrust
+
+The animation below sweeps
+<a href="acronyms.html#TIT"><abbr title="Turbine Inlet Temperature">TIT</abbr></a>
+from 1200 K to 1800 K in 10 K steps at fixed altitude = 60,000 ft.
+The colorbar and contour levels are anchored to the static trade study
+range (TIT = 1600 K) so frames are directly comparable to the
+<a href="index.html">front page plots</a>.
+
+<img src="surrogate_tit_sweep_thrust.gif" width="84%"
+     alt="Specific thrust over OPR x Mach as TIT sweeps 1200-1800 K"/>
+
+---
+
+## TIT Sweep - SFC
+
+<img src="surrogate_tit_sweep.gif" width="84%"
+     alt="SFC over OPR x Mach as TIT sweeps 1200-1800 K"/>
+
+Note: color banding in the GIFs is a hard GIF format limitation (256 colors
+per frame). The underlying model resolution is continuous - see the
+<a href="index.html">static plots</a> for the true output quality at TIT = 1600 K.
+
+---
+
+## Reproducing the Results
+
+```bash
+# 1. Generate LHS dataset (~20k solver calls, ~5 min)
+python scripts/run_lhs_study.py
+
+# 2. Train surrogate (50 Optuna trials, ~10 min)
+python scripts/train_surrogate.py
+
+# 3. Generate GIF animations
+python scripts/run_surrogate_gif.py
+```
 """
 
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from pathlib import Path
 
 import numpy as np
@@ -27,8 +123,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 
-from pipeline.io_utils import read_pkl, write_pkl
-from pipeline.lhs_study import LHSDataset
+from pipeline.lhs_study import LHSDataset, read_pkl, write_pkl
 
 optuna.logging.set_verbosity(optuna.logging.WARNING)
 
@@ -96,7 +191,7 @@ class EngineRegressor:
         self,
         source: Path | LHSDataset,
         n_optuna_trials: int = 20,
-        optuna_callback: callable | None = None,
+        optuna_callback: Callable | None = None,
     ) -> None:
         """Load an existing model or train a new one.
 
@@ -253,7 +348,7 @@ class EngineRegressor:
             val_loss = loss_fn(model(self._x_val), self._y_val).item()
         return val_loss
 
-    def _train(self, n_trials: int, callback: callable | None = None) -> None:
+    def _train(self, n_trials: int, callback: Callable | None = None) -> None:
         """Run Optuna to find best hidden layer sizes, then train final model."""
         def objective(trial: optuna.Trial) -> float:
             h1 = trial.suggest_int("h1", 8, 64)

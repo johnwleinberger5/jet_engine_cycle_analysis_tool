@@ -6,8 +6,8 @@ No magic numbers should appear elsewhere in the pipeline — import from here.
 
 # Thermodynamic
 GAMMA: float = 1.4        # ratio of specific heats, calorically perfect air
-CP: float = 1005.0        # J/(kg·K), specific heat at constant pressure
-R_AIR: float = 287.05     # J/(kg·K), specific gas constant for air
+CP: float = 1005.0        # J/(kg*K), specific heat at constant pressure
+R_AIR: float = 287.05     # J/(kg*K), specific gas constant for air
 
 # Engine model
 ETA_C: float = 0.88       # compressor isentropic efficiency
@@ -50,3 +50,6 @@ LHS_TIT_MAX: float = 1800.0   # K
 LHS_ALT_MIN: float = 20_000.0  # ft
 LHS_ALT_MAX: float = 70_000.0  # ft
 LHS_N_SAMPLES: int = 20_000
+LHS_TIT_STEP: float = 10.0   # K, TIT increment between GIF frames
+GIF_N_MACH: int = 150        # OPR × Mach grid resolution for surrogate GIF frames
+GIF_N_OPR: int = 130

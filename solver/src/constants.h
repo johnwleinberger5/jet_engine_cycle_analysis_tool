@@ -4,8 +4,8 @@ namespace constants {
 
 // Thermodynamic
 constexpr double GAMMA        = 1.4;          // ratio of specific heats (calorically perfect air)
-constexpr double CP           = 1005.0;       // J/(kg·K), specific heat at constant pressure
-constexpr double R_AIR        = 287.05;       // J/(kg·K), specific gas constant for air
+constexpr double CP           = 1005.0;       // J/(kg*K), specific heat at constant pressure
+constexpr double R_AIR        = 287.05;       // J/(kg*K), specific gas constant for air
 
 // Engine model — fixed per CLAUDE.md
 constexpr double ETA_C        = 0.88;         // compressor isentropic efficiency

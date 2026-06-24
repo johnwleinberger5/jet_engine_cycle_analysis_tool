@@ -25,3 +25,8 @@ dev = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pipeline*"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:matplotlib",
+]

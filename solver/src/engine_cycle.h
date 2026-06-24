@@ -35,7 +35,7 @@ private:
     void calculate_turbine();
     void calculate_nozzle();
 
-    // Station state arrays — indexed 0–5
+    // Station state arrays — indexed 0-5
     std::array<double, constants::N_STATIONS> t0_k_{};
     std::array<double, constants::N_STATIONS> p0_pa_{};
 
