@@ -49,4 +49,4 @@ LHS_TIT_MIN: float = 1200.0   # K
 LHS_TIT_MAX: float = 1800.0   # K
 LHS_ALT_MIN: float = 20_000.0  # ft
 LHS_ALT_MAX: float = 70_000.0  # ft
-LHS_N_SAMPLES: int = 50_000
+LHS_N_SAMPLES: int = 20_000

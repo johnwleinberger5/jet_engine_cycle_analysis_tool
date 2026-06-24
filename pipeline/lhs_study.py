@@ -96,7 +96,8 @@ class LHSDataset:
         samples = lows + unit_samples * (highs - lows)
 
         rows = []
-        for opr, mach, tit_k, altitude_ft in samples:
+        print_every = max(1, n_samples // 10)
+        for i, (opr, mach, tit_k, altitude_ft) in enumerate(samples):
             result = run_solver(mach=mach, opr=opr, tit_k=tit_k, altitude_ft=altitude_ft)
             rows.append({
                 "opr": opr,
@@ -106,5 +107,7 @@ class LHSDataset:
                 "specific_thrust_n_per_kgs": result.specific_thrust_n_per_kgs,
                 "sfc_kg_per_s_per_n": result.sfc_kg_per_s_per_n,
             })
+            if (i + 1) % print_every == 0:
+                print(f"  {i + 1:,} / {n_samples:,} samples complete", flush=True)
 
         return pd.DataFrame(rows, columns=_COLUMNS)

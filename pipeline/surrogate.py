@@ -58,6 +58,7 @@ class _MLP(nn.Module):
         hidden_sizes: tuple[int, int, int],
     ) -> None:
         super().__init__()
+        self.hidden_sizes = hidden_sizes
         h1, h2, h3 = hidden_sizes
         self.net = nn.Sequential(
             nn.Linear(n_inputs, h1), nn.ReLU(),
@@ -68,6 +69,10 @@ class _MLP(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.net(x)
+
+    def __repr__(self) -> str:
+        h1, h2, h3 = self.hidden_sizes
+        return f"MLP(4 -> {h1} -> {h2} -> {h3} -> 2)"
 
 
 class EngineRegressor:
@@ -82,7 +87,12 @@ class EngineRegressor:
 
     model: _MLP
 
-    def __init__(self, source: Path | LHSDataset, n_optuna_trials: int = 20) -> None:
+    def __init__(
+        self,
+        source: Path | LHSDataset,
+        n_optuna_trials: int = 20,
+        optuna_callback: callable | None = None,
+    ) -> None:
         """Load an existing model or train a new one.
 
         Args:
@@ -92,6 +102,10 @@ class EngineRegressor:
                 ``outputs/engine_regressor.pkl``.
             n_optuna_trials: Number of Optuna trials for hyperparameter
                 search. Only used when ``source`` is a ``LHSDataset``.
+            optuna_callback: Optional callable passed to
+                ``study.optimize`` as a callback. Signature:
+                ``(study, trial) -> None``. Only used when ``source`` is
+                a ``LHSDataset``.
 
         Raises:
             FileNotFoundError: If ``source`` is a ``Path`` that does not exist.
@@ -102,7 +116,7 @@ class EngineRegressor:
             self.__dict__.update(saved.__dict__)
         elif isinstance(source, LHSDataset):
             self._prepare_data(source.df)
-            self._train(n_optuna_trials)
+            self._train(n_optuna_trials, optuna_callback)
             write_pkl(_DEFAULT_MODEL_PATH, self)
         else:
             raise TypeError(
@@ -218,17 +232,18 @@ class EngineRegressor:
             val_loss = loss_fn(model(self._x_val), self._y_val).item()
         return val_loss
 
-    def _train(self, n_trials: int) -> None:
+    def _train(self, n_trials: int, callback: callable | None = None) -> None:
         """Run Optuna to find best hidden layer sizes, then train final model."""
         def objective(trial: optuna.Trial) -> float:
             h1 = trial.suggest_int("h1", 8, 64)
-            h2 = trial.suggest_int("h2", 8, 64)
-            h3 = trial.suggest_int("h3", 8, 64)
+            h2 = trial.suggest_int("h2", 8, 32)
+            h3 = trial.suggest_int("h3", 8, 32)
             m = self._build_model((h1, h2, h3))
             return self._fit(m, epochs=50)
 
         study = optuna.create_study(direction="minimize")
-        study.optimize(objective, n_trials=n_trials)
+        callbacks = [callback] if callback is not None else []
+        study.optimize(objective, n_trials=n_trials, callbacks=callbacks)
 
         best = study.best_params
         self.model = self._build_model((best["h1"], best["h2"], best["h3"]))
